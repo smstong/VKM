@@ -106,6 +106,7 @@ LRESULT RIOnWMInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			SetCursorPos(WIN_SCREEN_W, ptCursor.y); // fix cursor pos
 			// Make all input to current transparent window, so other apps not affected.
 			FullscreenWindow(g_hMainWnd);
+			SetForegroundWindow(g_hMainWnd);
 			SetActiveWindow(g_hMainWnd);	// Make current Window deactive
 			SetFocus(g_hMainWnd);
 
