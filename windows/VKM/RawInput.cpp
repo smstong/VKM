@@ -2,14 +2,31 @@
 #include "RawInput.h"
 #include <strsafe.h>
 #include "KM.h"
-#include "Config.h"
 #include "WindowHelper.h"
+#include "ini.h"
 
 extern HWND g_hMainWnd;
+
+int g_win_screen_w = 0;
+int g_win_screen_h = 0;
+int g_linux_screen_w = 0;
+int g_linux_screen_h = 0;
+int g_linux_screen_x = 0;
+int g_linux_screen_y = 0;
 
 // Register RAW INPUT
 void RIInit()
 {
+	ini_t* config = ini_load("config.ini");
+	g_win_screen_w = atoi(ini_get(config, "SERVER", "WIN_SCREEN_W"));
+	g_win_screen_h = atoi(ini_get(config, "SERVER", "WIN_SCREEN_H"));
+	g_linux_screen_w = atoi(ini_get(config, "CLIENT", "LINUX_SCREEN_W"));
+	g_linux_screen_h = atoi(ini_get(config, "CLIENT", "LINUX_SCREEN_H"));
+	g_linux_screen_x = atoi(ini_get(config, "CLIENT", "LINUX_SCREEN_X"));
+	g_linux_screen_y = atoi(ini_get(config, "CLIENT", "LINUX_SCREEN_Y"));
+
+	ini_free(config);
+
 	RAWINPUTDEVICE Rid[2];
 
 	Rid[0].usUsagePage = 0x01;
@@ -79,7 +96,7 @@ LRESULT RIOnWMInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		static int vx = 0;				// virtual mouse X
 		static int vy = 0;				// virtual mouse Y
 		
-		if (vx< WIN_SCREEN_W) {
+		if (vx< g_win_screen_w) {
 			vx = ptCursor.x;
 			vy = ptCursor.y;
 		}
@@ -88,22 +105,22 @@ LRESULT RIOnWMInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		vx += raw->data.mouse.lLastX;
 		vy += raw->data.mouse.lLastY;
-		if (vx > WIN_SCREEN_W + LINUX_SCREEN_W) {
-			vx = WIN_SCREEN_W + LINUX_SCREEN_W;
+		if (vx > g_win_screen_w + g_linux_screen_w) {
+			vx = g_win_screen_w + g_linux_screen_w;
 		}
 		//wchar_t msg[32];
 		//swprintf(msg, 32, L"%d", vx);
 		//SetWindowText(g_hMainWnd, msg);
 
-		if (vx >= WIN_SCREEN_W) {
-			if (vxOld < WIN_SCREEN_W) {
+		if (vx >= g_win_screen_w) {
+			if (vxOld < g_win_screen_w) {
 				firstEnterLinux = 1;
 			}
 			else {
 				firstEnterLinux = 0;
 			}
 			inLinux = 1;
-			SetCursorPos(WIN_SCREEN_W, ptCursor.y); // fix cursor pos
+			SetCursorPos(g_win_screen_w, ptCursor.y); // fix cursor pos
 			// Make all input to current transparent window, so other apps not affected.
 			FullscreenWindow(g_hMainWnd);
 			SetForegroundWindow(g_hMainWnd);
@@ -148,7 +165,7 @@ LRESULT RIOnWMInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			int ajustx = 0;
 			if (firstEnterLinux) {
-				ajustx = -LINUX_SCREEN_W;
+				ajustx = -g_linux_screen_w;
 			}
 			KMSendMouseEvent(
 				raw->data.mouse.lLastX + ajustx,

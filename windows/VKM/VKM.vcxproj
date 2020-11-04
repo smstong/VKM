@@ -151,8 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Config.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="ini.h" />
     <ClInclude Include="KM.h" />
     <ClInclude Include="RawInput.h" />
     <ClInclude Include="Resource.h" />
@@ -163,6 +163,7 @@
     <ClInclude Include="WindowHelper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ini.c" />
     <ClCompile Include="KM.cpp" />
     <ClCompile Include="RawInput.cpp" />
     <ClCompile Include="SocketHelper.cpp" />
@@ -176,6 +177,9 @@
   <ItemGroup>
     <Image Include="small.ico" />
     <Image Include="VKM.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

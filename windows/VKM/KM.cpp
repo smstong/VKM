@@ -2,17 +2,24 @@
 #include "SocketHelper.h"
 #include "KM.h"
 #include <stdio.h>
-#include "Config.h"
+#include "ini.h"
 
 static sockaddr_in clAddr;
 static SOCKET udpSock;
 
 void KMInit()
 {
+	ini_t* config = ini_load("config.ini");
+	const char* client_ip = ini_get(config, "CLIENT", "CLIENT_IP");
+	const char* udp_port = ini_get(config, "CLIENT", "UDP_PORT");
+
 	clAddr.sin_family = AF_INET;
-	clAddr.sin_port = htons(8888);
-	inet_pton(AF_INET, CLIENT_IP, &clAddr.sin_addr);
-	udpSock = SHCreateUDPSocket(UDP_PORT);
+	clAddr.sin_port = htons(atoi(udp_port));
+	inet_pton(AF_INET, client_ip, &clAddr.sin_addr);
+
+	udpSock = SHCreateUDPSocket(udp_port);
+	ini_free(config);
+
 	if (udpSock == NULL) {
 		MessageBox(NULL, L"CreateUDPSocket() failed\n", L"ERROR", MB_OK);
 		exit(1);
