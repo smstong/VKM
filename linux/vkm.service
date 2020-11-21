@@ -1,0 +1,12 @@
+[Unit]
+Description=Virtual Keyboard Mouse
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/vkm
+TimeoutStartSec=0
+
+[Install]
+WantedBy=default.target
+
