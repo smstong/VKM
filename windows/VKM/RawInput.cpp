@@ -17,7 +17,7 @@ int g_linux_screen_y = 0;
 // Register RAW INPUT
 void RIInit()
 {
-	ini_t* config = ini_load("config.ini");
+	ini_t* config = ini_load("VKM.ini");
 	g_win_screen_w = atoi(ini_get(config, "SERVER", "WIN_SCREEN_W"));
 	g_win_screen_h = atoi(ini_get(config, "SERVER", "WIN_SCREEN_H"));
 	g_linux_screen_w = atoi(ini_get(config, "CLIENT", "LINUX_SCREEN_W"));

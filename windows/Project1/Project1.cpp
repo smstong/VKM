@@ -38,6 +38,30 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
+	wchar_t exePath[256] = { 0 };
+	wchar_t folder[256] = { 0 };
+	GetModuleFileName(NULL, exePath, sizeof(exePath)/sizeof(exePath[0])-1);
+	int lastBackSlash = 0;
+	int i = 0;
+	for (i = 0; i < lstrlen(exePath); i++)
+	{
+		if (exePath[i] == L'\\') {
+			lastBackSlash = i;
+		}
+	}
+	for (i = 0; i < lastBackSlash; i++) {
+		folder[i] = exePath[i];
+	}
+	folder[i] = L'\0';
+
+	SetCurrentDirectory(folder);
+
+	SetCurrentDirectory(folder);
+	GetCurrentDirectory(255, folder);
+
+	MessageBox(NULL, folder, L"TEST", MB_OK);
+
+
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_PROJECT1));
 
     MSG msg;

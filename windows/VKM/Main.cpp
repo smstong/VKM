@@ -25,6 +25,8 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
+void SetCurrentDirAsExe();
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -34,6 +36,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
+	SetCurrentDirAsExe();
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -205,4 +208,25 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+void SetCurrentDirAsExe()
+{
+	wchar_t exePath[256] = { 0 };
+	wchar_t folder[256] = { 0 };
+	GetModuleFileName(NULL, exePath, sizeof(exePath) / sizeof(exePath[0]) - 1);
+	int lastBackSlash = 0;
+	int i = 0;
+	for (i = 0; i < lstrlen(exePath); i++)
+	{
+		if (exePath[i] == L'\\') {
+			lastBackSlash = i;
+		}
+	}
+	for (i = 0; i < lastBackSlash; i++) {
+		folder[i] = exePath[i];
+	}
+	folder[i] = L'\0';
+
+	SetCurrentDirectory(folder);
 }

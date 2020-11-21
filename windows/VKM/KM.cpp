@@ -9,7 +9,7 @@ static SOCKET udpSock;
 
 void KMInit()
 {
-	ini_t* config = ini_load("config.ini");
+	ini_t* config = ini_load("VKM.ini");
 	const char* client_ip = ini_get(config, "CLIENT", "CLIENT_IP");
 	const char* udp_port = ini_get(config, "CLIENT", "UDP_PORT");
 
